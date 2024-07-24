@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import petcare.app.core.service.IPetService;
-import petcare.app.core.utils.exceptions.ResourceNotFoundException;
 import petcare.app.domain.dto.PetDto;
 import petcare.app.domain.entity.Pet;
 import petcare.app.domain.utils.conversor.PetDtoConversor;
+import petcare.app.domain.utils.exceptions.ResourceNotFoundException;
 
 /** Controlador de gestión de mascotas */
 @RestController
@@ -45,12 +45,12 @@ public class PetController {
   }
 
   /**
-   * Busca una mascota dado su ID
+   * GetMapping - Busca una mascota dado su ID
    * 
    * @param id ID de la mascota
    * @return PetDto - DTO de la mascota si se encuentra, null en caso contrario
    */
-  @GetMapping("/find/id/{id}")
+  @GetMapping("/find/{id}")
   PetDto findById(@PathVariable Long id) {
 
     Optional<Pet> optPet = petService.findById(id);
@@ -67,7 +67,7 @@ public class PetController {
   }
 
   /**
-   * Busca todas las mascotas asociadas con el cliente
+   * GetMapping - Busca todas las mascotas asociadas con el cliente
    * 
    * @param clientId ID del cliente
    * @param pageable Sistema de paginación
@@ -80,7 +80,7 @@ public class PetController {
   }
 
   /**
-   * Busca todas las mascotas asociadas con el cliente, dado su NIF/NIE
+   * GetMapping - Busca todas las mascotas asociadas con el cliente, dado su NIF/NIE
    * 
    * @param clientNationalIdDocument Documento nacional de identidad del cliente (NIF/NIE)
    * @param pageable                 Sistema de paginación
@@ -97,7 +97,7 @@ public class PetController {
   }
 
   /**
-   * Almacena una nueva mascota en el sistema
+   * PostMapping - Almacena una nueva mascota en el sistema
    * 
    * @param pet Mascota a almacenar
    * @return ResponseEntity(Pet) - Respuesta con la mascota ya almacenada en la base de datos
@@ -111,7 +111,7 @@ public class PetController {
   }
 
   /**
-   * Modifica una mascota ya almacenada en el sistema
+   * PutMapping - Modifica una mascota ya almacenada en el sistema
    * 
    * @param pet Mascota con los datos ya modificados
    * @param id  ID de la mascota a modificar
@@ -138,7 +138,7 @@ public class PetController {
   }
 
   /**
-   * Añade una nueva asociación cliente - mascota
+   * PutMapping - Añade una nueva asociación cliente - mascota
    * 
    * @param petId              ID de la mascota
    * @param nationalIdDocument Documento nacional de identidad del cliente (NIF/NIE)
@@ -164,7 +164,7 @@ public class PetController {
   }
 
   /**
-   * Elimina una mascota del sistema.
+   * DeleteMapping - Elimina una mascota del sistema.
    * 
    * @param id ID de la mascota a eliminar
    * @return ResponseEntity(Pet) - Respuesta con el resultado de la operación
@@ -188,7 +188,7 @@ public class PetController {
   }
 
   /**
-   * Elimina una asociación cliente - mascota
+   * DeleteMapping - Elimina una asociación cliente - mascota
    * 
    * @param petId    ID de la mascota
    * @param clientId ID del cliente

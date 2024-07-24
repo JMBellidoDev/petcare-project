@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import petcare.app.core.service.IAppointmentService;
-import petcare.app.core.utils.exceptions.ResourceNotFoundException;
 import petcare.app.domain.dto.AppointmentDto;
-import petcare.app.domain.entity.Appointment;
 import petcare.app.domain.utils.conversor.AppointmentDtoConversor;
+import petcare.app.domain.utils.exceptions.ResourceNotFoundException;
 
 /** Controlador de citas veterinarias */
 @RestController
@@ -43,6 +42,11 @@ public class AppointmentController {
   @Autowired
   public void setAppointmentService(IAppointmentService appointmentService) {
     this.appointmentService = appointmentService;
+  }
+
+  @GetMapping("/test")
+  public ResponseEntity<String> test() {
+    return ResponseEntity.ok("Server is running");
   }
 
   /**
@@ -140,14 +144,20 @@ public class AppointmentController {
         .toList();
   }
 
+  /**
+   * PostMapping - Almacena una nueva cita en el sistema
+   * 
+   * @param appointmentDto DTO de la cita a almacenar
+   * @return ResponseEntity(AppointmentDto) - Respuesta con la cita almacenada en formato DTO
+   */
   @PostMapping
-  public ResponseEntity<Appointment> save(@RequestBody Appointment appointment) {
+  public ResponseEntity<AppointmentDto> save(@RequestBody AppointmentDto appointmentDto) {
 
-    ResponseEntity<Appointment> result;
+    ResponseEntity<AppointmentDto> result;
 
     // Se intenta guardar la entidad. Se lanza la excepción si alguno de los atributos no se puede encontrar
     try {
-      Appointment savedAppointment = appointmentService.save(appointment);
+      AppointmentDto savedAppointment = appointmentService.save(appointmentDto);
       result = ResponseEntity.status(HttpStatus.CREATED).body(savedAppointment);
 
     } catch (ResourceNotFoundException e) {
@@ -159,15 +169,22 @@ public class AppointmentController {
     return result;
   }
 
+  /**
+   * PutMapping - Modifica una cita existente en el sistema
+   * 
+   * @param appointmentDto DTO con la cita ya modificada
+   * @param id             ID de la cita a modificar
+   * @return ResponseEntity(AppointmentDto) - Respuesta con la cita ya modificada en formato DTO
+   */
   @PutMapping("/{id}")
-  public ResponseEntity<Appointment> update(@RequestBody Appointment appointment, @PathVariable Long id) {
+  public ResponseEntity<AppointmentDto> update(@RequestBody AppointmentDto appointmentDto, @PathVariable Long id) {
 
-    ResponseEntity<Appointment> result;
+    ResponseEntity<AppointmentDto> result;
 
     // Se intenta actualizar la entidad. Se lanza la excepción si alguno de los atributos no se puede encontrar
     try {
-      Appointment savedAppointment = appointmentService.update(appointment, id);
-      result = ResponseEntity.status(HttpStatus.CREATED).body(savedAppointment);
+      AppointmentDto savedAppointmentDto = appointmentService.update(appointmentDto, id);
+      result = ResponseEntity.status(HttpStatus.CREATED).body(savedAppointmentDto);
 
     } catch (ResourceNotFoundException e) {
 
@@ -179,10 +196,16 @@ public class AppointmentController {
 
   }
 
+  /**
+   * DeleteMapping - Elimina una cita del sistema
+   * 
+   * @param id ID de la cita a eliminar
+   * @return ResponseEntity(AppointmentDto) - Respuesta con la confirmación de la eliminación de la cita
+   */
   @DeleteMapping("/{id}")
-  public ResponseEntity<Appointment> delete(@PathVariable Long id) {
+  public ResponseEntity<AppointmentDto> delete(@PathVariable Long id) {
 
-    ResponseEntity<Appointment> result;
+    ResponseEntity<AppointmentDto> result;
 
     // Se intenta eliminar la entidad. Se lanza la excepción si alguno de los atributos no se puede encontrar
     try {

@@ -11,16 +11,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import petcare.app.core.model.repository.AppointmentRepository;
-import petcare.app.core.model.repository.ClientRepository;
-import petcare.app.core.model.repository.PetRepository;
-import petcare.app.core.model.repository.VetRepository;
-import petcare.app.core.utils.ExceptionMessages;
-import petcare.app.core.utils.exceptions.ResourceNotFoundException;
+import petcare.app.domain.dto.AppointmentDto;
 import petcare.app.domain.entity.Appointment;
 import petcare.app.domain.entity.Client;
 import petcare.app.domain.entity.Pet;
 import petcare.app.domain.entity.Vet;
+import petcare.app.domain.repository.AppointmentRepository;
+import petcare.app.domain.repository.ClientRepository;
+import petcare.app.domain.repository.PetRepository;
+import petcare.app.domain.repository.VetRepository;
+import petcare.app.domain.utils.ExceptionMessages;
+import petcare.app.domain.utils.conversor.AppointmentDtoConversor;
+import petcare.app.domain.utils.exceptions.ResourceNotFoundException;
 
 /** Implementación del servicio de gestión de citas */
 @Service
@@ -46,6 +48,36 @@ public class AppointmentServiceImpl implements IAppointmentService {
   @Autowired
   public void setAppointmentRepository(AppointmentRepository appointmentRepository) {
     this.appointmentRepository = appointmentRepository;
+  }
+
+  /**
+   * Setter - PetRepository. Inyección de dependencias
+   * 
+   * @param petRepository Repositorio de mascotas
+   */
+  @Autowired
+  public void setPetRepository(PetRepository petRepository) {
+    this.petRepository = petRepository;
+  }
+
+  /**
+   * Setter - ClientRepository. Inyección de dependencias
+   * 
+   * @param clientRepository Repositorio de clientes
+   */
+  @Autowired
+  public void setClientRepository(ClientRepository clientRepository) {
+    this.clientRepository = clientRepository;
+  }
+
+  /**
+   * Setter - VetRepository. Inyección de dependencias
+   * 
+   * @param vetRepository Repositorio de veterinarios
+   */
+  @Autowired
+  public void setVetRepository(VetRepository vetRepository) {
+    this.vetRepository = vetRepository;
   }
 
   @Override
@@ -93,69 +125,81 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
   @Override
   @Transactional
-  public Appointment save(Appointment appointment) throws ResourceNotFoundException {
+  public AppointmentDto save(AppointmentDto appointmentDto) throws ResourceNotFoundException {
+
+    Appointment appointment = AppointmentDtoConversor.toAppointment(appointmentDto);
 
     // Se asigna el veterinario
     Vet vet = vetRepository
-        .findById(appointment.getVet().getId())
+        .findById(appointmentDto.getVetDtoSimple().getId())
         .orElseThrow(() -> new ResourceNotFoundException(
-            String.format(ExceptionMessages.VET_NOT_FOUND_BY_ID, appointment.getVet().getId())));
+            String.format(ExceptionMessages.VET_NOT_FOUND_BY_ID, appointmentDto.getVetDtoSimple().getId())));
 
     // Se asigna la mascota
     Pet pet = petRepository
-        .findById(appointment.getPet().getId())
+        .findById(appointmentDto.getPetDtoSimple().getId())
         .orElseThrow(() -> new ResourceNotFoundException(
-            String.format(ExceptionMessages.PET_NOT_FOUND_BY_ID, appointment.getPet().getId())));
+            String.format(ExceptionMessages.PET_NOT_FOUND_BY_ID, appointmentDto.getPetDtoSimple().getId())));
 
     // Se asigna el cliente
     Client client = clientRepository
-        .findById(appointment.getClient().getId())
+        .findById(appointmentDto.getClientDtoSimple().getId())
         .orElseThrow(() -> new ResourceNotFoundException(
-            String.format(ExceptionMessages.CLIENT_NOT_FOUND_BY_ID, appointment.getClient().getId())));
+            String.format(ExceptionMessages.CLIENT_NOT_FOUND_BY_ID, appointmentDto.getClientDtoSimple().getId())));
+
+    // Se actualizan vet, pet y client
+    pet.getAppointments().add(appointment);
 
     appointment.setVet(vet);
     appointment.setPet(pet);
     appointment.setClient(client);
 
-    return appointmentRepository.save(appointment);
+    Appointment savedAppointment = appointmentRepository.save(appointment);
+
+    return AppointmentDtoConversor.toAppointmentDto(savedAppointment);
   }
 
   @Override
   @Transactional
-  public Appointment update(Appointment appointment, Long id) throws ResourceNotFoundException {
+  public AppointmentDto update(AppointmentDto appointmentDto, Long id) throws ResourceNotFoundException {
 
     Optional<Appointment> optSavedAppointment = appointmentRepository.findById(id);
 
     // Se obtiene la cita del sistema y se modifican los datos
     if (optSavedAppointment.isPresent()) {
 
-      Appointment savedAppointment = optSavedAppointment.get();
+      Appointment foundAppointment = optSavedAppointment.get();
 
-      savedAppointment.setAppointmentDate(appointment.getAppointmentDate());
+      foundAppointment.setAppointmentDate(appointmentDto.getAppointmentDate());
 
       // Se asigna el veterinario
       Vet vet = vetRepository
-          .findById(appointment.getVet().getId())
+          .findById(appointmentDto.getVetDtoSimple().getId())
           .orElseThrow(() -> new ResourceNotFoundException(
-              String.format(ExceptionMessages.VET_NOT_FOUND_BY_ID, appointment.getVet().getId())));
+              String.format(ExceptionMessages.VET_NOT_FOUND_BY_ID, appointmentDto.getVetDtoSimple().getId())));
 
       // Se asigna la mascota
       Pet pet = petRepository
-          .findById(appointment.getPet().getId())
+          .findById(appointmentDto.getPetDtoSimple().getId())
           .orElseThrow(() -> new ResourceNotFoundException(
-              String.format(ExceptionMessages.PET_NOT_FOUND_BY_ID, appointment.getPet().getId())));
+              String.format(ExceptionMessages.PET_NOT_FOUND_BY_ID, appointmentDto.getPetDtoSimple().getId())));
 
       // Se asigna el cliente
       Client client = clientRepository
-          .findById(appointment.getClient().getId())
+          .findById(appointmentDto.getClientDtoSimple().getId())
           .orElseThrow(() -> new ResourceNotFoundException(
-              String.format(ExceptionMessages.CLIENT_NOT_FOUND_BY_ID, appointment.getClient().getId())));
+              String.format(ExceptionMessages.CLIENT_NOT_FOUND_BY_ID, appointmentDto.getClientDtoSimple().getId())));
 
-      savedAppointment.setVet(vet);
-      savedAppointment.setPet(pet);
-      savedAppointment.setClient(client);
+      // Se almacenan todos los atributos y se guardan los datos
+      pet.getAppointments().add(foundAppointment);
 
-      return appointmentRepository.save(savedAppointment);
+      foundAppointment.setVet(vet);
+      foundAppointment.setPet(pet);
+      foundAppointment.setClient(client);
+
+      Appointment modifiedAppointment = appointmentRepository.save(foundAppointment);
+
+      return AppointmentDtoConversor.toAppointmentDto(modifiedAppointment);
 
       // Se lanza la excepción si no se encuentra la mascota
     } else {
@@ -171,6 +215,17 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     // Se elimina si se encuentra la cita. Sino, se lanza excepción
     if (optSavedAppointment.isPresent()) {
+
+      // Se elimina la cita del resto de relaciones
+      Appointment appointment = optSavedAppointment.get();
+
+      Pet pet = appointment.getPet();
+      pet.getAppointments().remove(appointment);
+
+      // Se almacenan de nuevo las entidades sin la cita
+      petRepository.save(pet);
+
+      // Se elimina la cita
       appointmentRepository.deleteById(id);
 
     } else {

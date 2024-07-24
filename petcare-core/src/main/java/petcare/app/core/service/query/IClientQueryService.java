@@ -3,6 +3,7 @@ package petcare.app.core.service.query;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import petcare.app.domain.entity.Client;
 
@@ -17,6 +18,7 @@ public interface IClientQueryService {
    * @return Optional(Client) - Un objeto de la clase Optional que podrá contener el usuario en caso de encontrarlo en
    *         el sistema
    */
+  @Transactional(readOnly = true)
   public Optional<Client> findById(Long id);
 
 }

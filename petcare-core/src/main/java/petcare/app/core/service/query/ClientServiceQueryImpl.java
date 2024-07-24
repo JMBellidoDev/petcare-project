@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import petcare.app.core.model.repository.ClientRepository;
 import petcare.app.domain.entity.Client;
+import petcare.app.domain.repository.ClientRepository;
 
 /** Implementación del servicio de acceso a datos referentes a un cliente o usuario */
 @Service
@@ -26,6 +27,7 @@ public class ClientServiceQueryImpl implements IClientQueryService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Optional<Client> findById(Long id) {
 
     return clientRepository.findById(id);

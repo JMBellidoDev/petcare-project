@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import petcare.app.domain.entity.Vet;
 
@@ -19,16 +20,8 @@ public interface IVetQueryService {
    * @return Optional(Vet) - Un objeto de la clase Optional que podrá contener el veterinario en caso de encontrarlo en
    *         el sistema
    */
+  @Transactional(readOnly = true)
   Optional<Vet> findById(Long id);
-
-  /**
-   * Busca un veterinario dado el ID de la cita
-   * 
-   * @param appointmentId ID de la cita
-   * @return Optional(Vet) - Un objeto de la clase Optional que podrá contener el veterinario en caso de encontrarlo en
-   *         el sistema
-   */
-  Optional<Vet> findByAppointmentsId(Long appointmentId);
 
   /**
    * Busca todos los veterinarios pertenecientes a la misma entidad o clínica cuyo nombre contenga al aportado <br/>
@@ -39,6 +32,7 @@ public interface IVetQueryService {
    * @param pageable    Sistema de paginación
    * @return List(Vet) - Una lista con todos los veterinarios que cumplen la condición
    */
+  @Transactional(readOnly = true)
   List<Vet> findByNameAndVetEntityId(String name, Long vetEntityId, Pageable pageable);
 
   /**
@@ -49,6 +43,7 @@ public interface IVetQueryService {
    * @param pageable    Sistema de paginación
    * @return List(Vet) - Una lista con todos los veterinarios que cumplen la condición
    */
+  @Transactional(readOnly = true)
   List<Vet> findByVetEntityId(Long vetEntityId, Pageable pageable);
 
 }

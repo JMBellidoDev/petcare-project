@@ -70,7 +70,8 @@ public class Pet {
   private List<Appointment> appointments;
 
   /** Listado de clientes de la aplicación, o usuarios, que están asociados con esta mascota */
-  @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "pets")
+  @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY,
+      mappedBy = "pets")
   private List<Client> clients;
 
 }

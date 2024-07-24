@@ -7,8 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import petcare.app.core.utils.exceptions.ResourceNotFoundException;
+import petcare.app.domain.dto.AppointmentDto;
 import petcare.app.domain.entity.Appointment;
+import petcare.app.domain.utils.exceptions.ResourceNotFoundException;
 
 /** Interfaz de servicio de citas veterinarias */
 @Service
@@ -69,23 +70,23 @@ public interface IAppointmentService {
   /**
    * Almacena una nueva cita en el sistema
    * 
-   * @param appointment Cita a almacenar
-   * @return Appointment
+   * @param appointmentDto Cita a almacenar en formato DTO
+   * @return AppointmentDto
    * @throws ResourceNotFoundException Si no se encuentra alguno de los recursos necesarios
    */
   @Transactional
-  Appointment save(Appointment appointment) throws ResourceNotFoundException;
+  AppointmentDto save(AppointmentDto appointmentDto) throws ResourceNotFoundException;
 
   /**
    * Modifica una cita del sistema
    * 
-   * @param appointment Cita con los nuevos datos
-   * @param id          ID de la cita a modificar
-   * @return Appointment - Cita modificada
+   * @param appointmentDto Cita con los nuevos datos
+   * @param id             ID de la cita a modificar
+   * @return AppointmentDto - Cita modificada
    * @throws ResourceNotFoundException Si no se encuentra alguno de los recursos necesarios
    */
   @Transactional
-  Appointment update(Appointment appointment, Long id) throws ResourceNotFoundException;
+  AppointmentDto update(AppointmentDto appointmentDto, Long id) throws ResourceNotFoundException;
 
   /**
    * Elimina una cita del sistema

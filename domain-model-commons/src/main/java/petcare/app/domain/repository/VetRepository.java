@@ -1,4 +1,4 @@
-package petcare.app.core.model.repository;
+package petcare.app.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,19 +8,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import petcare.app.domain.entity.Vet;
 
 /** Repositorio de acceso a los distintos veterinarios almacenados en el sistema */
+@Repository
 public interface VetRepository extends CrudRepository<Vet, Long>, JpaRepository<Vet, Long> {
 
   /**
-   * Busca el veterinario encargado de una cita
+   * Busca un veterinario dado su username
    * 
-   * @param appointmentId ID de la cita
-   * @return Optional(Vet) - Un objeto del tipo Optional que podrá contener el veterinario en caso de ser encontrado
+   * @param username Username
+   * @return Optional(Client) - Un objeto del tipo Optional que podrá contener el veterinario en caso de ser encontrado
    */
-  Optional<Vet> findByAppointmentsId(Long appointmentsId);
+  Optional<Vet> findByUsername(String username);
 
   /**
    * Busca todos los veterinarios pertenecientes a la misma entidad o clínica dado su nombre completo<br/>

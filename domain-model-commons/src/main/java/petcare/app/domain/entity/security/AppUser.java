@@ -39,7 +39,7 @@ public abstract class AppUser {
   private String password;
 
   /** Indica si la cuenta del usuario está activa y se permite su login en la aplicación */
-  private boolean enabled;
+  private boolean enabled = true;
 
   /** Email del usuario */
   @Column(length = 80)

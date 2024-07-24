@@ -1,4 +1,4 @@
-package petcare.app.core.utils.exceptions;
+package petcare.app.domain.utils.exceptions;
 
 /** Excepción lanzada cuando un recurso no es encontrado en el sistema */
 public class ResourceNotFoundException extends Exception {

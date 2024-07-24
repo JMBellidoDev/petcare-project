@@ -60,24 +60,14 @@ public class VetQueryController {
     return result;
   }
 
-  @GetMapping("/find/appointment-id/{appointmentId}")
-  public VetDto findByAppointmentId(@PathVariable Long appointmentId) {
-
-    Optional<Vet> optVet = vetService.findByAppointmentsId(appointmentId);
-    VetDto result;
-
-    if (optVet.isPresent()) {
-      result = VetDtoConversor.toVetDto(optVet.get());
-
-    } else {
-      LOGGER.info("Not found");
-      result = null;
-    }
-
-    return result;
-
-  }
-
+  /**
+   * GetMapping - Busca todos los veterinarios por nombre dentro de la entidad veterinaria especificada
+   * 
+   * @param name        Nombre del veterinario a buscar
+   * @param vetEntityId ID de la entidad veterinaria
+   * @param pageable    Sistema de paginación
+   * @return List(VetDto) - Lista con todos los veterinarios encontrados en formato DTO
+   */
   @GetMapping("/find/name/{name}/entity/{vetEntityId}")
   public List<VetDto> findByNameAndVetEntityId(@PathVariable(name = "name") String name,
       @PathVariable(name = "vetEntityId") Long vetEntityId, Pageable pageable) {
@@ -91,6 +81,13 @@ public class VetQueryController {
         .toList();
   }
 
+  /**
+   * GetMapping - Busca todos los veterinarios que pertenezcan a una entidad veterinaria especificada
+   * 
+   * @param vetEntityId ID de la entidad veterinaria
+   * @param pageable    SIstema de paginación
+   * @return List(VetDto) - Lista con todos los veterinarios encontrados en formato DTO
+   */
   @GetMapping("/find/entity/{vetEntityId}")
   public List<VetDto> findByVetEntityId(@PathVariable(name = "vetEntityId") Long vetEntityId, Pageable pageable) {
 

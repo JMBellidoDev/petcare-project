@@ -1,4 +1,4 @@
-package petcare.app.core.model.repository;
+package petcare.app.domain.repository;
 
 import java.util.List;
 
@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import petcare.app.domain.entity.Report;
 
 /** Repositorio de informes veterinarios */
+@Repository
 public interface ReportRepository extends CrudRepository<Report, Long>, JpaRepository<Report, Long> {
 
   /**

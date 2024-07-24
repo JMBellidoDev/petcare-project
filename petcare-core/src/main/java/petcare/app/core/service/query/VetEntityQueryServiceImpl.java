@@ -6,9 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import petcare.app.core.model.repository.VetEntityRepository;
 import petcare.app.domain.entity.VetEntity;
+import petcare.app.domain.repository.VetEntityRepository;
 
 /** Implementación del servicio de acceso a datos referentes a una entidad veterinaria */
 @Service
@@ -28,12 +29,14 @@ public class VetEntityQueryServiceImpl implements IVetEntityQueryService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Optional<VetEntity> findById(Long id) {
 
     return vetEntityRepository.findById(id);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<VetEntity> findByNameContaining(String name, Pageable pageable) {
 
     return vetEntityRepository.findByNameContaining(name, pageable);

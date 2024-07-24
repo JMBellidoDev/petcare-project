@@ -31,6 +31,12 @@ public class ClientQueryController {
     this.clientQueryService = clientQueryService;
   }
 
+  /**
+   * GetMapping - Busca un cliente dado su ID
+   * 
+   * @param id ID del cliente a buscar
+   * @return ClientDto DTO del cliente si se ha encontrado, null en caso contrario
+   */
   @GetMapping("/find/{id}")
   public ClientDto findById(@PathVariable Long id) {
 

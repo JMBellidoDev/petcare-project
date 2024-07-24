@@ -2,6 +2,8 @@ package petcare.app.domain.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,18 +31,19 @@ public class Appointment {
   private Long id;
 
   /** Cliente que traerá a la mascota */
-  @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY)
   @JoinColumn(name = "client_id")
   private Client client;
 
   /** Mascota a tratar en la cita */
-  @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY)
   @JoinColumn(name = "pet_id")
   private Pet pet;
 
   /** Veterinario que tratará la cita */
-  @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY)
   @JoinColumn(name = "vet_id")
+  @JsonIgnore
   private Vet vet;
 
   /** Fecha de la cita */

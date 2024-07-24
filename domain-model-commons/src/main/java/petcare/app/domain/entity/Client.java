@@ -12,7 +12,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -78,10 +77,5 @@ public class Client extends AppUser {
       uniqueConstraints = { @UniqueConstraint(columnNames = { "pet_id", "client_id" }) })
   @JsonIgnore
   private List<Pet> pets;
-
-  /** Citas de visitas a un veterinario */
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "client")
-  @JsonIgnore
-  private List<Appointment> appointments;
 
 }

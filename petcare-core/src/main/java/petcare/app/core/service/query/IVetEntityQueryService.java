@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import petcare.app.domain.entity.VetEntity;
 
@@ -22,6 +23,7 @@ public interface IVetEntityQueryService {
    * @return Optional(VetEntity) - Un objeto de la clase Optional que podrá contener la entidad veterinaria en caso de
    *         encontrarla en el sistema
    */
+  @Transactional(readOnly = true)
   Optional<VetEntity> findById(Long id);
 
   /**
@@ -31,6 +33,7 @@ public interface IVetEntityQueryService {
    * @param pageable Sistema de paginación
    * @return List(VetEntity) - Una lista con todas las entidades que cumplan la condición
    */
+  @Transactional(readOnly = true)
   List<VetEntity> findByNameContaining(String name, Pageable pageable);
 
 }

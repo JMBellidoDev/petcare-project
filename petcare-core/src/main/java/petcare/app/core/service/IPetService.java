@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import petcare.app.core.utils.exceptions.ResourceNotFoundException;
 import petcare.app.domain.entity.Pet;
+import petcare.app.domain.utils.exceptions.ResourceNotFoundException;
 
 /** Interfaz de servicio de mascotas */
 @Service

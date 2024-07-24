@@ -17,7 +17,7 @@ import petcare.app.domain.utils.conversor.VetEntityDtoConversor;
 
 /** Controlador de acceso a la información de una entidad veterinaria */
 @RestController
-@RequestMapping("/vet-entities")
+@RequestMapping("/vet-entities-query")
 public class VetEntityQueryController {
 
   /** Servicio de consultas a entidades veterinarias */
@@ -33,6 +33,12 @@ public class VetEntityQueryController {
     this.vetEntityQueryService = vetEntityQueryService;
   }
 
+  /**
+   * GetMapping - Busca una entidad veterinaria dado su ID
+   * 
+   * @param id ID de la entidad veterinaria a buscar
+   * @return VetEntityDto - DTO de la entidad veterinaria si se ha encontrado, null en caso contrario
+   */
   @GetMapping("/find/{id}")
   public VetEntityDto findById(@PathVariable Long id) {
 
@@ -49,6 +55,13 @@ public class VetEntityQueryController {
     return dto;
   }
 
+  /**
+   * GetMapping - Busca todas las entidades veterinarias que contengan el nombre especificado
+   * 
+   * @param name     Nombre a buscar
+   * @param pageable Sistema de paginación
+   * @return List(VetEntityDto) - Lista con todas las entidades veterinarias encontradas
+   */
   @GetMapping("/find/name/{name}")
   public List<VetEntityDto> findByNameContaining(@PathVariable String name, Pageable pageable) {
 

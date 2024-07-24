@@ -1,4 +1,4 @@
-package petcare.app.core.model.repository;
+package petcare.app.domain.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import petcare.app.domain.entity.Appointment;
 
@@ -19,6 +20,7 @@ import petcare.app.domain.entity.Appointment;
  * día actual, o ninguno en caso de no asistencia. Sin embargo, no se podrán buscar citas anteriores al momento actual.
  * 
  */
+@Repository
 public interface AppointmentRepository extends CrudRepository<Appointment, Long>, JpaRepository<Appointment, Long> {
 
   /**

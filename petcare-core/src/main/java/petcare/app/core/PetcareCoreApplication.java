@@ -4,11 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.ComponentScan;
 
 /** Clase principal */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EntityScan(basePackages = { "petcare.app.domain.entity" })
+@EntityScan(basePackages = { "petcare.app.domain.entity", "petcare.app.domain.entity.security" })
+@ComponentScan(basePackages = { "petcare.app.domain.repository" })
 public class PetcareCoreApplication {
 
   /**

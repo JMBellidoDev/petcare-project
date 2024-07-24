@@ -27,11 +27,13 @@ public class ReportDtoConversor {
     reportDto.setId(report.getId());
     reportDto.setReason(report.getReason());
     reportDto.setTreatment(report.getTreatment());
+    reportDto.setDiagnosis(report.getDiagnosis());
     reportDto.setReportDate(report.getReportDate());
 
     if (report.getPet() != null) {
 
       PetDto pet = new PetDto();
+      pet.setId(report.getPet().getId());
       pet.setName(report.getPet().getName());
 
       reportDto.setPetDto(pet);
@@ -56,12 +58,14 @@ public class ReportDtoConversor {
 
     report.setId(reportDto.getId());
     report.setReason(reportDto.getReason());
+    report.setDiagnosis(reportDto.getDiagnosis());
     report.setTreatment(reportDto.getTreatment());
     report.setReportDate(reportDto.getReportDate());
 
     if (reportDto.getPetDto() != null) {
 
       Pet pet = new Pet();
+      pet.setId(reportDto.getPetDto().getId());
       pet.setName(reportDto.getPetDto().getName());
 
       report.setPet(pet);
