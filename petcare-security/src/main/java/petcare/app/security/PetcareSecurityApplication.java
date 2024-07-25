@@ -1,17 +1,14 @@
-package petcare.app.core;
+package petcare.app.security;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-/** Clase principal */
 @SpringBootApplication
-@EnableDiscoveryClient
-@EntityScan(basePackages = { "petcare.app.domain.entity", "petcare.app.domain.entity.security" })
+@EntityScan(basePackages = { "petcare.app.domain.entity" })
 @EnableJpaRepositories(basePackages = { "petcare.app.domain.repository" })
-public class PetcareCoreApplication {
+public class PetcareSecurityApplication {
 
   /**
    * Método main
@@ -19,7 +16,7 @@ public class PetcareCoreApplication {
    * @param args Argumentos
    */
   public static void main(String[] args) {
-    SpringApplication.run(PetcareCoreApplication.class, args);
+    SpringApplication.run(PetcareSecurityApplication.class, args);
   }
 
 }

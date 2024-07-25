@@ -44,11 +44,6 @@ public class AppointmentController {
     this.appointmentService = appointmentService;
   }
 
-  @GetMapping("/test")
-  public ResponseEntity<String> test() {
-    return ResponseEntity.ok("Server is running");
-  }
-
   /**
    * GetMapping - Busca todas las citas asociadas con los animales relacionados directamente con el cliente aportado
    * 
