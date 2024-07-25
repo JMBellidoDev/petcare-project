@@ -12,25 +12,14 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfig {
 
   @Bean
-  SecurityWebFilterChain configure(ServerHttpSecurity http) throws Exception {
+  SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {
 
     http
         .authorizeExchange(authHttp -> authHttp
 
+            // Permiso a todos los usuarios
             .anyExchange()
-            .permitAll()
-        // Permiso a todos los usuarios
-        /*
-         * .requestMatchers(HttpMethod.GET, "/authorized") .permitAll()
-         * 
-         * // Permiso a todos los usuarios autenticados .requestMatchers(HttpMethod.GET, "/list")
-         * .hasAnyAuthority("SCOPE_user", "SCOPE_admin")
-         * 
-         * // Permiso a todos los usuarios con role de admin .requestMatchers(HttpMethod.POST, "/create")
-         * .hasAuthority("SCOPE_admin") .anyRequest() .authenticated()
-         */
-
-        )
+            .permitAll())
 
         // Deshabilitando el csrf para producción
         .csrf(csrf -> csrf.disable())
