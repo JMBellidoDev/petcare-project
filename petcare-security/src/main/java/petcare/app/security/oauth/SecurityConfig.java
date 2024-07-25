@@ -107,9 +107,33 @@ public class SecurityConfig {
   @Bean
   public RegisteredClientRepository registeredClientRepository() {
 
-    // Cliente que va a consumir la configuración de seguridad. Por ejemplo, uno
-    // para angular, otro para react, etc
-    RegisteredClient client1 = RegisteredClient
+    // Clientes que van a consumir la configuración de seguridad. Gateway + Angular
+    RegisteredClient clientGateway = RegisteredClient
+        .withId(UUID.randomUUID().toString())
+        .clientId("client-gateway")
+        .clientSecret("{noop}12345")
+
+        // Configuración de autorización
+        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+
+        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+
+        // Redirecciones
+        .redirectUri("http://127.0.0.1:8090/login/oauth2/code/client-gateway")
+        .redirectUri("http://127.0.0.1:8090/authorized")
+        .postLogoutRedirectUri("http://127.0.0.1:8090/logout")
+
+        .scope("client")
+        .scope("vet")
+        .scope("vet_entity")
+        .scope("root")
+        .scope(OidcScopes.OPENID)
+        .scope(OidcScopes.PROFILE)
+        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+        .build();
+
+    RegisteredClient clientFront = RegisteredClient
         .withId(UUID.randomUUID().toString())
         .clientId("client-app-front")
         .clientSecret("{noop}12345")
@@ -121,20 +145,19 @@ public class SecurityConfig {
         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 
         // Redirecciones
-        .redirectUri("http://127.0.0.1:8080/login/oauth2/code/client-app-front")
-        .redirectUri("http://127.0.0.1:8080/authorized")
-        .postLogoutRedirectUri("http://127.0.0.1:8080/logout")
+        .redirectUri("http://127.0.0.1:4200/login/oauth2/code/client-app-front")
+        .redirectUri("http://127.0.0.1:4200/authorized")
+        .postLogoutRedirectUri("http://127.0.0.1:4200/logout")
 
         .scope("client")
         .scope("vet")
         .scope("vet_entity")
-        .scope("root")
         .scope(OidcScopes.OPENID)
         .scope(OidcScopes.PROFILE)
         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
         .build();
 
-    return new InMemoryRegisteredClientRepository(client1);
+    return new InMemoryRegisteredClientRepository(clientGateway, clientFront);
   }
 
   @Bean
