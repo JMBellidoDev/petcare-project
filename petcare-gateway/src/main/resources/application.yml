@@ -2,7 +2,7 @@ resilience4j:
   circuitbreaker:
     configs:
       defaultconfig:
-        sliding-window-size: 6
+        sliding-window-size: 10
         failure-rate-threshold: 50
         wait-duration-in-open-state: 20s
         permitted-number-of-calls-in-half-open-state: 4
@@ -12,7 +12,7 @@ resilience4j:
   timelimiter:
     configs:
       defaultconfig:
-        timeout-duration: 6s
+        timeout-duration: 10s
     instances:
       general-app-circuitbreaker:
         base-config: defaultconfig
@@ -34,9 +34,8 @@ spring:
       - id: petcare-security
         uri: lb://petcare-security
         predicates:
-          - Path=/api/users/**
+          - Path=/users/**, /login
         filters:
-          - StripPrefix=1
           - name: CircuitBreaker
             args:
               name: general-app-circuitbreaker

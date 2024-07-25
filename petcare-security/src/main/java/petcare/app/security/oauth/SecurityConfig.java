@@ -73,10 +73,11 @@ public class SecurityConfig {
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
     http
+
         .authorizeHttpRequests(authorize -> authorize
 
             // La única ruta permitida para todos es la de login de usuarios
-            .requestMatchers(HttpMethod.POST, Paths.USERS_PREFIX + Paths.REGISTER_CLIENT)
+            .requestMatchers(HttpMethod.POST, Paths.USERS_PREFIX + Paths.REGISTER_CLIENT, "/login**")
             .permitAll()
 
             // Sólo puede modificar sus datos el mismo cliente
@@ -94,7 +95,7 @@ public class SecurityConfig {
 
             // Root puede y crear modificar datos de cualquier entidad
             .anyRequest()
-            .hasRole(RoleConstants.ROOT)
+            .authenticated()
 
         )
 
