@@ -46,3 +46,27 @@ spring:
             args:
               name: general-app-circuitbreaker
               statusCodes: 500
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://127.0.0.1:9000"
+      client:
+        registration:
+          client-gateway:
+            provider: spring
+            client-id: client-gateway
+            client-secret: 12345
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8090/authorized"
+            scope:
+              - openid
+              - profile
+              - client
+              - vet
+              - vet_entity
+              - root
+            client-name: client-gateway
+        provider:
+          spring:
+            issuer-uri: "http://127.0.0.1:9000"

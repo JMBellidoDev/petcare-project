@@ -136,7 +136,7 @@ public class SecurityConfig {
     RegisteredClient clientFront = RegisteredClient
         .withId(UUID.randomUUID().toString())
         .clientId("client-app-front")
-        .clientSecret("{noop}12345")
+        .clientSecret("{noop}123456")
 
         // Configuración de autorización
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)

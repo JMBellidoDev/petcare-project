@@ -3,20 +3,21 @@ package petcare.app.gateway.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
+@EnableWebFluxSecurity
 public class SecurityConfig {
 
   @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  SecurityWebFilterChain configure(ServerHttpSecurity http) throws Exception {
 
     http
-        .authorizeHttpRequests(authHttp -> authHttp
+        .authorizeExchange(authHttp -> authHttp
 
-            .anyRequest()
+            .anyExchange()
             .permitAll()
         // Permiso a todos los usuarios
         /*
@@ -33,12 +34,6 @@ public class SecurityConfig {
 
         // Deshabilitando el csrf para producción
         .csrf(csrf -> csrf.disable())
-
-        // Manejo del estado desde el token, no desde la sesión
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-        // Login
-        .oauth2Login(login -> login.loginPage("/oauth2/authorization/client-app-front"))
 
         // Cliente
         .oauth2Client(Customizer.withDefaults())
