@@ -24,12 +24,7 @@ spring:
       - id: petcare-core
         uri: lb://petcare-core
         predicates:
-          - Path=/api/appointments/**
-          - Path=/api/clients/**
-          - Path=/api/pets/**
-          - Path=/api/reports/**
-          - Path=/api/vet-entities/**
-          - Path=/api/vets/**
+          - Path=/api/appointments/**, /api/clients/**, /api/pets/**, /api/reports/**, /api/vet-entities/**, /api/vets/**
         filters:
           - StripPrefix=1
           - name: CircuitBreaker
