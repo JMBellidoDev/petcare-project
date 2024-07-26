@@ -1,17 +1,21 @@
 package petcare.app.gateway.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity.CsrfSpec;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
+  @Autowired
+  private JwtAuthenticationFilter authenticationFilter;
 
   @Bean
   SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {
@@ -20,7 +24,7 @@ public class SecurityConfig {
         .authorizeExchange(authHttp -> authHttp
 
             // Permiso a todos los usuarios
-            .pathMatchers("/login**", "/users/register/client")
+            .pathMatchers("/login", "/users/register/client")
             .permitAll()
 
             // Permiso de consulta de datos
@@ -48,16 +52,22 @@ public class SecurityConfig {
             .pathMatchers("/users/register/vet-entity")
             .hasRole("ROOT")
 
+            .anyExchange()
+            .authenticated()
+
         )
 
         // Deshabilitando el csrf para producción
-        .csrf(CsrfSpec::disable)
 
-        // Cliente
-        .oauth2Client(Customizer.withDefaults())
+        .addFilterAt(authenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+        .csrf(csrf -> csrf
+            .disable()
 
-        // Resource Server
-        .oauth2ResourceServer(resourceServer -> resourceServer.jwt(Customizer.withDefaults()));
+            // Cliente
+            .oauth2Client(Customizer.withDefaults())
+
+            // Resource Server
+            .oauth2ResourceServer(resourceServer -> resourceServer.jwt(Customizer.withDefaults())));
 
     return http.build();
   }
